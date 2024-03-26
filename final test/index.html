@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Matching Businesses with Interns</title>
+<style>
+   .logo {
+    width: 200px;
+    height: 140px;
+    margin-top: -10px;
+}
+
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #ffffff;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+
+  h1 {
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  label {
+    font-size: 18px;
+    margin-right: 10px;
+  }
+
+  select {
+    font-size: 16px;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-right: 10px;
+  }
+
+  button {
+    font-size: 16px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  button:hover {
+    background-color: #459aa0;
+  }
+
+  #form-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  #pairs {
+    margin-top: 20px;
+  }
+
+  p {
+    font-size: 16px;
+    color: #333;
+    margin: 10px 0;
+    display: flex;
+    align-items: center;
+  }
+
+  img {
+    margin-left: 20px;
+    border-radius: 10%;
+    width: 100px;
+  }
+
+  /* เพิ่มสไตล์ของเมนูเลือก */
+  select:focus {
+    outline: none;
+    border-color: #4CAF50;
+  }
+
+  /* การปรับสีของปุ่มเมื่อกำลังถูกกด */
+  button:active {
+    background-color: #3e8e41;
+  }
+</style>
+</head>
+<body>
+    <div class="navbar">
+        <img src="./Screenshot 2024-03-26 143103.png" alt="โลโก้ของคุณ" class="logo">
+        
+    </div>
+  <h1>Matching Businesses with Interns</h1>
+  <div id="form-container">
+    <label for="skillSelect">Select Skill:</label>
+    <select id="skillSelect">
+      <option value="programming">Programming</option>
+      <option value="marketing">Marketing</option>
+      <option value="design">Design</option>
+      <option value="content writing">Content Writing</option>
+      <option value="finance">Finance</option>
+      <option value="data analysis">Data Analysis</option>
+      <option value="medical">Medical</option>
+        <!-- Add new skill option below -->
+      
+    </select>
+    
+    
+    <button onclick="matchPairs()">Match</button>
+  </div>
+  
+  
+  <div id="pairs"></div>
+<script>
+  // JavaScript for matching and displaying results
+  const businesses = [
+    { name: "Business A", expertise: ["programming", "marketing"] },
+    { name: "Business B", expertise: ["design", "content writing"] },
+    { name: "Business C", expertise: ["finance", "data analysis"] },
+    { name: "Business D", expertise: ["medical", "design"] },
+    { name: "Business E", expertise: ["medical"] }
+  ];
+
+  const interns = [
+    { name: "Johny K.", skills: ["programming", "data analysis"],image: "people1.jpg" },
+    { name: "Billy S.", skills: ["marketing", "design"], image: "people2.jpg" },
+    { name: "Kathy Y.", skills: ["content writing", "finance"], image: "people3.jpg" },
+    { name: "Hochi P.", skills: ["medical"], image: "people4.jpg" }
+  ];
+
+  function matchPairs() {
+    const skillSelect = document.getElementById('skillSelect');
+    const selectedSkill = skillSelect.value;
+    const pairsElement = document.getElementById('pairs');
+
+    clearPreviousResults();
+
+    const matchedPairs = matchPairsBySkill(businesses, interns, selectedSkill);
+    matchedPairs.forEach(pair => {
+      const pairElement = document.createElement('p');
+      pairElement.textContent = `${pair.intern} is matched with ${pair.business}`;
+
+      const internImage = document.createElement('img');
+      internImage.src = pair.internImage;
+      internImage.alt = pair.intern;
+      pairElement.appendChild(internImage);
+
+      pairsElement.appendChild(pairElement);
+    });
+  }
+
+  function matchPairsBySkill(businesses, interns, selectedSkill) {
+    const pairs = [];
+
+    const filteredInterns = interns.filter(intern =>
+      intern.skills.includes(selectedSkill)
+    );
+
+    filteredInterns.forEach(intern => {
+      const business = businesses.find(business =>
+        business.expertise.includes(selectedSkill)
+      );
+
+      if (business) {
+        pairs.push({ intern: intern.name, internImage: intern.image, business: business.name });
+      }
+    });
+
+    return pairs;
+  }
+
+  function clearPreviousResults() {
+    const pairsElement = document.getElementById('pairs');
+    pairsElement.innerHTML = '';
+  }
+</script>
+</body>
+</html>
